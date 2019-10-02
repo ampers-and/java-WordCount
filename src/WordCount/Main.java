@@ -11,7 +11,7 @@ public class Main
     //    System.out.println(unText);
     //    System.out.println();
 
-       unText = unText.replaceAll("[[\\.\\?\\!\\,\\;\\:\\{\\}\\(\\)\\']]", "");
+       unText = unText.replaceAll("[[\\.\\?\\!\\,\\;\\:\\{\\}\\(\\)\\']]", "").toLowerCase();
 
     //    System.out.println(unText);
     //    System.out.println();
@@ -22,48 +22,66 @@ public class Main
     //    System.out.println(Arrays.toString(words));
     //    System.out.println();
 
-    HashMap<Integer, String> wordsHashMap = new HashMap<Integer, String>();
+    HashMap<String, Integer> wordsHashMap = new HashMap<String, Integer>();
 
-    int hashcount = 1;
-	for (String word : words)
+    int count = 1;
+
+    for (String word : words)
 		{
-            wordsHashMap.put(hashcount, word);
-            hashcount++;
-		}
-
-    for (Integer i : wordsHashMap.keySet())
-		{
-			System.out.println("key: " + i + " value: " + wordsHashMap.get(i));
-		}
-    System.out.println();
-        
-    System.out.println();
-    System.out.println( "Hash code " + wordsHashMap.hashCode());
-    System.out.println();
-
-    HashMap<Integer, String> wordsHashMap2 = new HashMap<Integer, String>();
-
-    int hashcount2 = 1;
-        for (String word : words)
+            if(wordsHashMap.containsKey(word))
             {
-                if( wordsHashMap2.containsValue(word))
-                    {
-                        hashcount2++;
-                        wordsHashMap2.put(hashcount2, word);
-                    }
-                {
-                    wordsHashMap2.put(hashcount2, word);
-                }
+            count = wordsHashMap.get(word) + 1;
+            wordsHashMap.put(word, count);
             }
+            else
+            {
+                wordsHashMap.put(word, 1);
+            }
+            
+		}
 
-    for (Integer i : wordsHashMap2.keySet())
+    // for (String word : words)
+	// 	{
+	// 		System.out.println("key: " + word + " value: " + wordsHashMap.get(word));
+    //     }
+    // System.out.println();
+    
+    // sort HashMap
+    ArrayList<HashMap.Entry<String, Integer>> sortedMap = new ArrayList<HashMap.Entry<String, Integer>>();
+    sortedMap.addAll(wordsHashMap.entrySet());
+
+    Collections.sort(sortedMap, new Comparator<HashMap.Entry<String, Integer>>()
+    {
+        public int compare(HashMap.Entry<String, Integer> o1, HashMap.Entry<String, Integer> o2)
         {
-            System.out.println("key: " + i + " value: " + wordsHashMap2.get(i));
+            return o2.getValue().compareTo(o1.getValue());
         }
-        System.out.println();
+    });
 
+    ArrayList<HashMap.Entry<String, Integer>> sortedMap2 = new ArrayList<HashMap.Entry<String, Integer>>();    
+
+    System.out.println("****Top 50****");
+    for (int i=0; i<50; i++)
+    {
+        sortedMap2.add(sortedMap.get(i));
+        System.out.println("Rank: " + (i+1) + " key: " + sortedMap.get(i).getKey() + " value: " + sortedMap.get(i).getValue());
+    }
     System.out.println();
-    System.out.println( "hash code 2" + wordsHashMap2.hashCode());
-    System.out.println();
+
+    //STRETCH
+    System.err.println("****STRETCH****");
+    Collections.sort(sortedMap2, new Comparator<HashMap.Entry<String, Integer>>()
+    {
+        public int compare(HashMap.Entry<String, Integer> o1, HashMap.Entry<String, Integer> o2)
+        {
+            return o1.getKey().compareTo(o2.getKey());
+        }
+    });
+
+    for (int i=0; i<sortedMap2.size(); i++)
+    {
+        System.out.println("key: " + sortedMap2.get(i).getKey() + " value: " + sortedMap2.get(i).getValue());
+    }
+        
     }
 }
